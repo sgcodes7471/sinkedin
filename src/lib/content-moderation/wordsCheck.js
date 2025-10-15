@@ -13,3 +13,7 @@
 // first one calculates the score and decides whether to post, check in llm or prevent
 // this returns the score to the caller function if llm-check is needed
 // next function is for the batch queueing and llm check, which can direct to a the delete post function
+
+function initialCheck() {}
+
+async function finalCheck() {}

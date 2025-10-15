@@ -52,7 +52,7 @@ async function LLMConnect(params) {
 
     const parsedResults = JSON.parse(output)
     const idsArray = parsedResults.abusive_post_ids || []
-    return { error: false, idsArray: idsArray, uncheckedPosts: [] }
+    return { idsArray: idsArray, uncheckedPosts: [] }
   } catch (error) {
     console.log('Error occured in generating responses')
     return { error: true, idsArray: [], uncheckedPosts: posts }
