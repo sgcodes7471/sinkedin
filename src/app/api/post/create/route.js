@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { Filter } from 'bad-words'
+import { initQueue } from '@/lib/content-moderation/batchPosts'
+import TokenizePosts from '@/lib/content-moderation/tokenizePosts'
 
 // Initialize the bad words filter
 const filter = new Filter()
+
+const { addToQueue } = initQueue()
 
 // List of positive words to detect
 const positiveWords = [
@@ -155,6 +159,14 @@ export async function POST(request) {
       )
       .eq('id', post.id) // Filter to get only the post we just created
       .single() // We expect only one result
+
+    const tokens = TokenizePosts(censoredContent)
+
+    const postObject = {
+      id: post.id,
+      tokens: tokens,
+    }
+    addToQueue(postObject)
 
     if (fetchError || !fullPost) {
       console.error('Error fetching newly created post:', fetchError)
